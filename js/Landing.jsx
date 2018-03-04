@@ -7,6 +7,7 @@ class App extends Component {
     title: "",
     players: "",
     size: "",
+    deck: "",
     items: []
   };
 
@@ -32,13 +33,16 @@ class App extends Component {
     const item = {
       title: this.state.title,
       players: this.state.players,
-      size: this.state.size
+      size: this.state.size,
+      deck: this.state.deck
     };
     itemsRef.push(item);
+
     this.setState({
       title: "",
       players: "",
-      size: ""
+      size: "",
+      deck: ""
     });
   };
 
@@ -60,11 +64,17 @@ class App extends Component {
               <input type="text" name="players" placeholder="Number of players?" onChange={this.handleChange} value={this.state.players} />
               <label htmlFor="size">Box / game size</label>
               <select name="size" onChange={this.handleChange} value={this.state.size}>
+                <option value="small" defaultValue>Choose size</option>
                 <option value="small">Small</option>
                 <option value="medium">Medium</option>
                 <option value="large">Large</option>
                 <option value="xlarge">Xlarge</option>
               </select>
+              <h3>Mechanics</h3>
+              <label htmlFor="deck">
+                Devkbuilding
+                <input name="deck" type="checkbox" checked={this.state.deck} onChange={this.handleChange} />
+              </label>
               <button>Add Item</button>
             </form>
           </section>
