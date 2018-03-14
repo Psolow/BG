@@ -1,14 +1,26 @@
 import React, { Component } from "react";
-import firebase from "./firebase";
+import { Link } from "react-router-dom";
+import firebase from "./firebase.js";
+import { string } from "prop-types";
+import styled from "styled-components";
 import snapshotToArray from "./snapshotToArray";
+import ShowCard from "./card";
+
+const CardContainer = styled.ul`
+  margin:0 0 0;
+  padding:0;
+  list-style:none;
+`;
+
+const CardStyle = styled.li`
+  display:inline;
+  margin-right:10px; 
+`;
 
 class App extends Component {
   state = {
-    title: "",
-    players: "",
-    size: "",
-    deck: "",
-    items: []
+    items: [],
+    searchTerm: ""
   };
 
   componentDidMount() {
@@ -23,77 +35,26 @@ class App extends Component {
     });
   }
 
-  handleChange = event => {
-    this.setState({ [event.target.name]: event.target.value });
-  };
-
-  handleSubmit = event => {
-    event.preventDefault();
-    const itemsRef = firebase.database().ref("games");
-    const item = {
-      title: this.state.title,
-      players: this.state.players,
-      size: this.state.size,
-      deck: this.state.deck
-    };
-    itemsRef.push(item);
-
-    this.setState({
-      title: "",
-      players: "",
-      size: "",
-      deck: ""
-    });
+  handleSearchTermChange = event => {
+    this.setState({ searchTerm: event.target.value });
   };
 
   render() {
     return (
-      <div className="app">
+      <div className="search">
         <header>
-          <div className="wrapper">
-            <h1>Sons of Solow Boardgame</h1>
-
-          </div>
+          <h1>Sons of Solow Boardgame</h1>
+          <CardContainer>
+            <CardStyle><Link to="/add">Tilføj spil</Link></CardStyle>
+            <CardStyle>Rediger spil</CardStyle>
+            <CardStyle>Se ønske liste</CardStyle>
+          </CardContainer>
+          <input onChange={this.handleSearchTermChange} value={this.state.searchTerm} type="text" placeholder="search" />
         </header>
-        <div className="container">
-          <section className="add-item">
-            <form onSubmit={this.handleSubmit}>
-              <label htmlFor="title">Title</label>
-              <input type="text" name="title" placeholder="Name of game?" onChange={this.handleChange} value={this.state.title} />
-              <label htmlFor="players">Number of players</label>
-              <input type="text" name="players" placeholder="Number of players?" onChange={this.handleChange} value={this.state.players} />
-              <label htmlFor="size">Box / game size</label>
-              <select name="size" onChange={this.handleChange} value={this.state.size}>
-                <option value="small" defaultValue>Choose size</option>
-                <option value="small">Small</option>
-                <option value="medium">Medium</option>
-                <option value="large">Large</option>
-                <option value="xlarge">Xlarge</option>
-              </select>
-              <h3>Mechanics</h3>
-              <label htmlFor="deck">
-                Devkbuilding
-                <input name="deck" type="checkbox" checked={this.state.deck} onChange={this.handleChange} />
-              </label>
-              <button>Add Item</button>
-            </form>
-          </section>
-
-          <section className="display-item">
-            <div className="wrapper">
-              <ul>
-                {this.state.items.map(item => {
-                  return (
-                    <li key={item.key}>
-                      <h3>{item.title}</h3>
-                      <p>Players: {item.players}</p>
-                      <p>Size: {item.size}</p>
-                    </li>
-                  );
-                })}
-              </ul>
-            </div>
-          </section>
+        <div>
+          {this.state.items
+            .filter(item => `${item.title} ${item.players} ${item.size} ${item.complex}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0)
+            .map(item => <ShowCard key={item.key} {...item} />)}
         </div>
       </div>
     );
