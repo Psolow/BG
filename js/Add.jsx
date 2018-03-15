@@ -93,6 +93,11 @@ class App extends Component {
     });
   };
 
+  removeItem(itemId) {
+    const itemRef = firebase.database().ref(`/items/${itemId}`);
+    itemRef.remove();
+  }
+
   handleSearchTermChange = event => {
     this.setState({ searchTerm: event.target.value });
   };

@@ -19,12 +19,12 @@ margin-right:10px;
 
 const ShowCard = props => (
   <Wrapper>
-    {/* <Image alt={`${props.title} Show poster`} src={`/public/img/posters/${props.poster}`} /> */}
     <div>
       <h3>Name: {props.title}</h3>
       <p>Max/suggested players: {props.players}</p>
       <p>Game size: {props.size}</p>
       <p>complexity: {props.complex}</p>
+      <button onClick={() => this.removeItem(ShowCard.key)}>Remove Item</button>
     </div>
   </Wrapper>
 );
