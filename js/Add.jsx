@@ -43,6 +43,11 @@ const FormLabel = styled.label`
 `;
 
 class App extends Component {
+  constructor(props){
+    super(props)
+
+    this.removeItem = this.removeItem.bind(this)
+  } 
   state = {
     title: "",
     players: "",
@@ -93,8 +98,8 @@ class App extends Component {
     });
   };
 
-  removeItem(itemId) {
-    const itemRef = firebase.database().ref(`/items/${itemId}`);
+  removeItem = itemId  => {
+    const itemRef = firebase.database().ref(`/games/${itemId}`);
     itemRef.remove();
   }
 
@@ -118,7 +123,7 @@ class App extends Component {
         <div>
           {this.state.items
             .filter(item => `${item.title} ${item.players} ${item.size} ${item.complex}`.toUpperCase().indexOf(this.state.searchTerm.toUpperCase()) >= 0)
-            .map(item => <ShowCard key={item.key} {...item} />)}
+            .map(item => <ShowCard key={item.key} {...item} removeCard={this.removeItem} itemID={item.key} />)}
         </div>
         <AddItemContainer>
           <form onSubmit={this.handleSubmit}>

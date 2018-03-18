@@ -24,7 +24,7 @@ const ShowCard = props => (
       <p>Max/suggested players: {props.players}</p>
       <p>Game size: {props.size}</p>
       <p>complexity: {props.complex}</p>
-      <button onClick={() => this.removeItem(ShowCard.key)}>Remove Item</button>
+      <button onClick={() => props.removeCard(props.itemID)}>Remove Item</button>
     </div>
   </Wrapper>
 );
